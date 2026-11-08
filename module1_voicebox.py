@@ -14,7 +14,7 @@ def speak(text):
     engine.runAndWait()
     engine.stop()
 
-def listen_and_recognize(duration=5,fs=16000,  silence_limit=1.2, threshold=2000):
+def listen_and_recognize(duration=5,fs=16000,  silence_limit=1.2, threshold=1500):
     print("\n[Status] Listening...")
 
     audio_chunks = []

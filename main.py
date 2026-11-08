@@ -8,6 +8,7 @@ def ask_corvus(prompt):
 
 ask_corvus("I have just started you up, greet me in your style")
 while True:
+
     user_speech = vb.listen_and_recognize()
     if user_speech:
         if user_speech:
