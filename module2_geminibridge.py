@@ -7,16 +7,59 @@ load_dotenv()
 
 
 clients = genai.Client()
+
+SYSTEM_INSTRUCTION = """
+You are Corvus, a highly intelligent AI assistant built like Jarvis
+by and for a 14-year-old student in Bangladesh Class 8.
+
+Keep your answers crisp, witty, and address the user as sir.
+Do not mention that you are inspired by Jarvis.
+
+Your answers will be read aloud using Piper TTS.
+Avoid Markdown, asterisks, unnecessary symbols, and URLs.
+
+For questions about current events, recent developments, or
+anything time-sensitive, use Google Search to obtain current
+information before answering.
+
+Prioritise reliable sources, distinguish confirmed facts from
+unverified reports, and mention relevant dates.
+
+Keep answers conversational and concise.
+Do not insult the user.
+"""
+
 def ask_gemini(prompt):
     try:
         response = clients.models.generate_content(
             model = "gemini-3.5-flash-lite",
             contents =prompt, 
             config={
-        'system_instruction': "You are Corvus, a highly intelligent AI assistant built like Jarvis by and for a 14-year-old student in Bangladesh Class 8. Keep your answers crisp, witty, and refer to the user as 'sir'. Dont mention that youre inspired by jarvis. Keep in mind your answers will be read by a sapi5 voice as your voice so dont do stuff like ** coating or other stuff and if you wanna say any quotes say the quote and unquote instad of just doing the signs. Do not insult the user. Praise him in a lowkey way if he asks you to explain it to someone else present during your conversation"
+        'system_instruction': SYSTEM_INSTRUCTION,
+        'tools': [
+            {"google_search: {}"}
+        ]
     }
         )
-        return response.text
+        answer = response.text
+
+        candidate = response.candidates[0]
+        metadata = candidate.grounding_metadata
+
+        if metadata and metadata.grounding_chunks:
+            print("\n [Sources used by Corvus]")
+            seen = set()
+
+            for chunk in metadata.grounding_chunks:
+                if chunk.web:
+                    title = chunk.web.title
+                    url = chunk.web.url
+
+                    if url and url not in seen:
+                        print(f"{title}:{url}")
+                        seen.add(url)
+
+        return answer
     except Exception as e:
         print(f"Error communicating with gemini: {e}")
         return "I'm having trouble connecting to my brain right now, sir"

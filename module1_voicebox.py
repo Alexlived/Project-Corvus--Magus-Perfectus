@@ -3,16 +3,26 @@ import speech_recognition as sr
 import pyttsx3
 import numpy as np
 import time
+import wave
+from piper.voice import PiperVoice
+
+MODEL_PATH = "en_GB-northern_english_male-medium.onnx"
+voice = PiperVoice.load(MODEL_PATH)
+
 
 def speak(text):
-    print(f"Corvus: {text}")
+    if not text:
+        return
+    print(f"[Corvus]: {text}")
 
-    engine = pyttsx3.init('sapi5')
-    engine.setProperty('rate', 175)
+    with sd.RawOutputStream(
+        samplerate=voice.config.sample_rate,
+        channels=1,
+        dtype="int16"
+    ) as stream:
+        for chunk in voice.synthesize(text):
+            stream.write(chunk.audio_int16_bytes)
 
-    engine.say(text)
-    engine.runAndWait()
-    engine.stop()
 
 def listen_and_recognize(duration=5,fs=16000,  silence_limit=1.2, threshold=1500):
     print("\n[Status] Listening...")

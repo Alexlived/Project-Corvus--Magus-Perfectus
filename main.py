@@ -11,10 +11,9 @@ while True:
 
     user_speech = vb.listen_and_recognize()
     if user_speech:
-        if user_speech:
-            if "go back to sleep" in user_speech:
-                vb.speak("Going back to sleep, sir.")
-                break
+        if "go back to sleep" in user_speech:
+            vb.speak("Going back to sleep, sir.")
+            break
         ask_corvus(user_speech)
     else:
         pass
