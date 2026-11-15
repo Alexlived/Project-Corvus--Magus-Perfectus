@@ -6,7 +6,7 @@ import time
 import wave
 from piper.voice import PiperVoice
 
-MODEL_PATH = "en_GB-northern_english_male-medium.onnx"
+MODEL_PATH = "C:/repos/Project Corvus/piper/voices/en_GB-northern_english_male-medium.onnx"
 voice = PiperVoice.load(MODEL_PATH)
 
 

@@ -4,6 +4,14 @@ from google import genai
 import module1_voicebox as vb
 
 load_dotenv()
+
+API_key = os.getenv("GEMINI_API_KEY")
+
+if not API_key:
+    raise RuntimeError("Gemini API key missing!")
+
+
+load_dotenv()
 SYSTEM_INSTRUCTION = """
 You are Corvus, a highly intelligent AI assistant built like Jarvis
 by and for a 14-year-old student in Bangladesh Class 8.
@@ -25,7 +33,7 @@ Keep answers conversational and concise.
 Do not insult the user.
 """
 
-clients = genai.Client()
+clients = genai.Client(api_key=API_key)
 def ask_gemini(prompt):
     try:
         response = clients.models.generate_content(
