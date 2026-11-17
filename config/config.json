@@ -1,0 +1,5 @@
+{
+    "Model": "gemini-3.5-flash-lite",
+    "piper_voice": "en_GB-northern_english_male-medium.onnx"
+    
+}

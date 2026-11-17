@@ -1,18 +1,29 @@
 import sounddevice as sd
 import speech_recognition as sr
-import pyttsx3
 import numpy as np
 import time
-import wave
+
+
+from pathlib import Path
 from piper.voice import PiperVoice
 
-MODEL_PATH = "C:/repos/Project Corvus/piper/voices/en_GB-northern_english_male-medium.onnx"
-voice = PiperVoice.load(MODEL_PATH)
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+MODEL_PATH = (
+    PROJECT_ROOT
+    / "piper"
+    / "voices"
+    / "en_GB-northern_english_male-medium.onnx"
+)
+
+voice = PiperVoice.load(str(MODEL_PATH))
 
 
 def speak(text):
     if not text:
-        return
+        return  
+
+    
     print(f"[Corvus]: {text}")
 
     with sd.RawOutputStream(

@@ -1,5 +1,5 @@
-import module1_voicebox as vb
-import module2_geminibridge as gb
+import modules.voicebox as vb
+import modules.geminibridge as gb
 
 
 def ask_corvus(prompt):

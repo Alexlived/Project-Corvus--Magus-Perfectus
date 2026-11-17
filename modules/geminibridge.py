@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from google import genai
-import module1_voicebox as vb
+
 
 load_dotenv()
 
@@ -33,22 +33,30 @@ Keep answers conversational and concise.
 Do not insult the user.
 """
 
-clients = genai.Client(api_key=API_key)
-def ask_gemini(prompt):
-    try:
-        response = clients.models.generate_content(
-            model = "gemini-3.5-flash-lite",
-            contents =prompt, 
-            config={
+clients = genai.Client(api_key=API_key) 
+
+chat = clients.chats.create(
+    model = "gemini-3.5-flash-lite",
+    config={
         'system_instruction': SYSTEM_INSTRUCTION
     }
-        )
+)
+
+
+def ask_gemini(prompt):
+    try:
+        response = chat.send_message(prompt)
         return response.text
+
+    
     except Exception as e:
         print(f"Error communicating with gemini: {e}")
         return "I'm having trouble connecting to my brain right now, sir"
+
+
+    
 if __name__ == "__main__":
     test_prompt = "Hello Corvus, give me a quick system status check."
     print(f"Prompt: {test_prompt}")
     answer = ask_gemini(test_prompt)
-    vb.speak(answer)
+    
